@@ -1,0 +1,8 @@
+{
+  "name": "pcbuilder",
+  "description": "pcbuilder website frontend packages",
+  "private": true,
+  "dependencies": {
+    "skeleton": "^2.0.4"
+  }
+}
