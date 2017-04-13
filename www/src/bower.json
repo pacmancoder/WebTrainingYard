@@ -3,6 +3,7 @@
   "description": "pcbuilder website frontend packages",
   "private": true,
   "dependencies": {
-    "skeleton": "^2.0.4"
+    "skeleton": "^2.0.4",
+    "bootstrap": "^3.3.7"
   }
 }
