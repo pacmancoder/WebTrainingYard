@@ -4,31 +4,29 @@ function login_callback(xhr, status) {
       window.location.href = "index.php";
       break;
     case "USER_NOT_EXISTS":
-      $("#email_form_group").addClass("has-error has-feedback");
-      $("#login_alert").text(
-        "User " +  $("#email_field").val() + " not exists!");
-      $("#login_alert").removeClass("hidden");
+      $("#l_email_form_group").addClass("has-error has-feedback");
+      $("#l_alert").text(
+        "User " +  $("#l_email_field").val() + " not exists!");
+      $("#l_alert").removeClass("hidden");
       break;
     case "WRONG_PASSWORD":
-      $("#password_form_group").addClass("has-error has-feedback");
-      $("#login_alert").text("Wrong password!");
-      $("#login_alert").removeClass("hidden");
+      $("#l_pass_form_group").addClass("has-error has-feedback");
+      $("#l_alert").text("Wrong password!");
+      $("#l_alert").removeClass("hidden");
       break;
     default:
-      $("#login_alert").text("Server error!");
-      $("#login_alert").removeClass("hidden");
-  }
-  if (xhr.responseText == "OK") {
-    window.location.href = "index.php";
+      $("#l_alert").text("Server error!");
+      $("#l_alert").removeClass("hidden");
   }
 }
+
 function process_login() {
-  $("#login_alert").addClass("hidden");
-  $("#email_form_group").removeClass("has-error has-feedback");
-  $("#password_form_group").removeClass("has-error has-feedback");
+  $("#l_alert").addClass("hidden");
+  $("#l_email_form_group").removeClass("has-error has-feedback");
+  $("#l_pass_form_group").removeClass("has-error has-feedback");
   var requestBody = {};
-  requestBody["login"] = $("#email_field").val();
-  requestBody["password"] = $("#password_field").val();
+  requestBody["email"] = $("#l_email_field").val();
+  requestBody["password"] = $("#l_pass_field").val();
   $.ajax({
     url: "api/login",
     type: "POST",
