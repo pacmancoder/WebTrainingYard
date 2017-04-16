@@ -5,9 +5,11 @@
     <title>title</title>
     <!-- CSS -->
     <link href="bower_resources/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Bootstrap core JavaScript-->
+    <!-- Bootstrap core JavaScript -->
     <script src="bower_resources/jquery/dist/jquery.min.js"></script>
     <script src="bower_resources/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--  User-defined script -->
+    <script type="text/javascript" src="js/main.js"></script>
   </head>
   <body>
     <div class="container">

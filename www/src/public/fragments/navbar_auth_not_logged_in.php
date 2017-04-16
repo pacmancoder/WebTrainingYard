@@ -17,7 +17,6 @@
   </li>
 </ul>
 <!-- Login Modal Form -->
-<script type="text/javascript" src="js/login.js"></script>
 <div id="login_form" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
