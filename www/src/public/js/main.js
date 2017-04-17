@@ -115,7 +115,7 @@ function process_register() {
         form.setError("email", "Invalid email!");
         return;
     }
-    if (!Validator.isPassword(from.getValue("password"))) {
+    if (!Validator.isPassword(form.getValue("password"))) {
         form.setError("password", "Too short password!");
         return;
     }
@@ -146,7 +146,7 @@ function process_register() {
         url: "api/register",
         type: "POST",
         data: requestBody,
-        complete: function() {
+        complete: function(xhr, status) {
             switch(xhr.responseText) {
                 case "OK":
                   window.location.href = "index.php";
