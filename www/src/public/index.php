@@ -3,7 +3,8 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-require '../vendor/autoload.php';
+require_once '../vendor/autoload.php';
+require_once '../CatalogPage.php';
 
 $app = new \Slim\App;
 
@@ -27,17 +28,8 @@ $container['db'] = function ($c) {
 };
 
 $app->get('/', function (Request $request, Response $response) {
-	$session = $this->session;
-
-	if (isset($session->user)) {
-		$user = $session->user;
-	}
-
-	ob_start();
-		echo "<h1>Hello there!</h1>";
-	$page_body = ob_get_clean();
-
-    require 'html/base_page.phtml';
+    $page = new CatalogPage($this);
+    $page->prepare()->render();
     return $response;
 });
 
@@ -55,17 +47,17 @@ $app->post('/api/login', function (Request $request, Response $response) {
     $email = $parsedBody['email'];
     $password = $parsedBody['password'];
 
-    $stmt = $db->query("SELECT email, password_hash FROM User WHERE email = '$email'");
-    $db_user = $stmt->fetch();
+    $stmt = $db->query("SELECT id, email, password_hash FROM User WHERE email = '$email'");
+    $dbUser = $stmt->fetch();
 
     $responseBody = $response->getBody();
 
-    if (!$db_user) {
+    if (!$dbUser) {
         $responseBody->write("USER_NOT_EXISTS");
-    } else if (!password_verify($password, $db_user['password_hash'])){
+    } else if (!password_verify($password, $dbUser['password_hash'])){
         $responseBody->write("WRONG_PASSWORD");
     } else {
-        $session->user = $email;
+        $session->uid = $dbUser['id'];
         $responseBody->write("OK");
     }
     return $response;
@@ -95,7 +87,12 @@ $app->post('/api/register', function (Request $request, Response $response) {
             "'" . $user['fname'] . "', " .
             "'" . $user['lname'] . "')"
         );
-        $session->user = $email;
+
+        $dbUserStmt = $db->query("SELECT id FROM User WHERE email = '$email'");
+        $dbUser = $dbUserStmt->fetch();
+        $dbUserStmt->closeCursor();
+
+        $session->uid = $dbUser['id'];
         $responseBody->write("OK");
     }
     return $response;

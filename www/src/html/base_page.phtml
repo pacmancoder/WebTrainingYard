@@ -34,13 +34,7 @@
                 </ul>
             </li>
         </ul>
-    		<?php
-    			if (isset($user)) {
-    				require 'html/navbar_auth_logged_in.phtml';
-    			} else {
-                    require 'html/navbar_auth_not_logged_in.phtml';
-    			}
-    		?>
+        <?php echo $authFragment; ?>
         <form class="navbar-form" role="search">
             <div class="input-group col-xs-4">
                 <input type="text" class="form-control" placeholder="Search" name="q">
@@ -53,9 +47,7 @@
         </form>
       </div>
     </nav>
-
-  	<?php echo $page_body ?>
-
+  	<?php echo $pageBody; ?>
     </div>
   </body>
 </html>
