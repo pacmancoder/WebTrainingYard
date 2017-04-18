@@ -36,9 +36,9 @@
         </ul>
     		<?php
     			if (isset($user)) {
-    				require 'fragments/navbar_auth_logged_in.php';
+    				require 'html/navbar_auth_logged_in.phtml';
     			} else {
-                    require 'fragments/navbar_auth_not_logged_in.php';
+                    require 'html/navbar_auth_not_logged_in.phtml';
     			}
     		?>
         <form class="navbar-form" role="search">

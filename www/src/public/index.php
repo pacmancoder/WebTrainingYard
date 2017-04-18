@@ -34,10 +34,10 @@ $app->get('/', function (Request $request, Response $response) {
 	}
 
 	ob_start();
-		require 'welcome_page.php';
+		echo "<h1>Hello there!</h1>";
 	$page_body = ob_get_clean();
 
-    require 'main.php';
+    require 'html/base_page.phtml';
     return $response;
 });
 
