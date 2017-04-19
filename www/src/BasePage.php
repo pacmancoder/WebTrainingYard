@@ -1,9 +1,9 @@
 <?php
-    require_once 'PageComposer.php';
+    require_once __DIR__.'/PageComposer.php';
 
     abstract class BasePage {
         function __construct($app) {
-            $this->basePage = new PageComposer('html/base_page.phtml');
+            $this->basePage = new PageComposer(__DIR__.'/html/base_page.phtml');
             $this->session = $app->session;
             $this->db = $app->db;
             // save user info. TODO: refactoring, incapsulate?
@@ -17,10 +17,10 @@
 
         function prepare() {
             if (isset($this->user)) {
-                $authFragment = new PageComposer('html/navbar_auth_logged_in.phtml');
+                $authFragment = new PageComposer(__DIR__.'/html/navbar_auth_logged_in.phtml');
                 $authFragment->compose('firstName', $this->user['first_name']);
             } else {
-                $authFragment = new PageComposer('html/navbar_auth_not_logged_in.phtml');
+                $authFragment = new PageComposer(__DIR__.'/html/navbar_auth_not_logged_in.phtml');
             }
             $this->basePage->compose('authFragment', $authFragment);
             $this->basePage->compose('pageBody', $this->prepareBody());
