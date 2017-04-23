@@ -185,9 +185,9 @@ function process_catalog() {
         });
         var categoryStr = $('.__catalog').data('category');
         var pageStr = $('.__catalog').data('page');
-        console.log('/index.php/catalog/' + categoryStr + '/' + pageStr + '/' + filterStr);
+        window.location.href = '/index.php/catalog/' + categoryStr + '/' + pageStr + '/' + filterStr;
     } else {
-        console.log('/index.php/catalog/' + categoryStr + '/' + pageStr);
+        window.location.href = '/index.php/catalog/' + categoryStr + '/' + pageStr;
     }
 }
 
