@@ -1,13 +1,26 @@
-<div class="row">
+<div class="row __catalog" data-category=<?php echo $category; ?> data-page=<?php echo $page; ?> >
     <div class="col-sm-4 col-md-3" style="margin-top: 15px;">
         <div class="panel-group" id="accordion">
-            <?php echo $categoryFragments; ?>
+            <?php echo $filters; ?>
         </div>
     </div>
 
-    <div class="col-sm-8 col md-9">
+    <div class="col-sm-8 col md-9" style="margin: 25px;">
+        <div class="row">
+            <ol class="breadcrumb">
+                <?php echo $breadcrumbItems; ?>
+            </ol>
+        </div>
         <div class="row">
             <?php echo $itemCards; ?>
         </div>
+        <div class="row">
+            <div class="text-center">
+                <ul class="pagination col-center">
+                    <?php echo $paginationItems; ?>
+                </ul>
+            </div>
+        </div>
     </div>
+
 </div>

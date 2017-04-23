@@ -80,7 +80,7 @@ function process_login() {
         complete: function(xhr, status) {
             switch(xhr.responseText) {
                 case "OK":
-                    window.location.href = "index.php";
+                    window.location.href = "/index.php";
                     break;
                 case "USER_NOT_EXISTS":
                     form.setError("email",
@@ -149,7 +149,7 @@ function process_register() {
         complete: function(xhr, status) {
             switch(xhr.responseText) {
                 case "OK":
-                  window.location.href = "index.php";
+                  window.location.href = "/index.php";
                   break;
                 case "USER_EXISTS":
                   form.setError("email", "User already exists!");
@@ -160,3 +160,52 @@ function process_register() {
         }
     });
 }
+
+function process_catalog() {
+    var filters = {};
+
+    $(".__filter").each(function() {
+        var caseList = [];
+        $(this).find('.__case:checked').each(function() {
+            caseList.push($(this).data('id'));
+        });
+        if (caseList.length > 0) {
+            filters[$(this).data('id')] = caseList.join();
+        }   
+    });
+    var categoryStr = $('.__catalog').data('category');
+    var pageStr = $('.__catalog').data('page');
+    if (Object.keys(filters).length > 0) {
+        var filterStr = '';
+        $.each(filters, function(index, value) {
+            if (index != 0) {
+                filterStr += ';';
+            }
+            filterStr += index + '=' + value;
+        });
+        var categoryStr = $('.__catalog').data('category');
+        var pageStr = $('.__catalog').data('page');
+        console.log('/index.php/catalog/' + categoryStr + '/' + pageStr + '/' + filterStr);
+    } else {
+        console.log('/index.php/catalog/' + categoryStr + '/' + pageStr);
+    }
+}
+
+$(document).ready(function(){
+    $(".__pagination-item").click(function() {
+        if ($(this).hasClass('disabled')) {
+            return;
+        }
+        if ($(this).text().trim() == 'Previous') {
+            var currentStr = parseInt($('.__catalog').data('page'));
+            $('.__catalog').data('page', --currentStr);
+        } else if ($(this).text().trim() == 'Next') {
+            var currentStr = parseInt($('.__catalog').data('page'));
+            $('.__catalog').data('page', ++currentStr);
+        } else {
+            var currentStr = parseInt($('.__catalog').data('page'));
+            $('.__catalog').data('page', parseInt($(this).text().trim()) - 1);
+        }
+        process_catalog();
+    });  
+});

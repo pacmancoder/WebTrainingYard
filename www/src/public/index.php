@@ -27,8 +27,12 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
-$app->get('/', function (Request $request, Response $response) {
-    $page = new CatalogPage($this);
+$app->get('/catalog/{category}[/{page}[/{filter}]]', function (Request $request, Response $response) {
+    $page = new CatalogPage(
+        $this, 
+        $request->getAttribute('category'), 
+        $request->getAttribute('filter'),
+        $request->getAttribute('page'));
     $page->prepare()->render();
     return $response;
 });

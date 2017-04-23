@@ -1,0 +1,14 @@
+<tr>
+    <td>
+        <div class="checkbox" style="display:inline">
+           <label>
+               <input type="checkbox"
+                      class="__case"
+                      data-id=<?php echo '"'.$id.'"'; ?>
+                      onclick="process_catalog()"
+                      <?php echo (isset($checked)?' checked':''); ?>
+               /><?php echo $description; ?>
+           </label>
+        </div>
+    </td>
+</tr>

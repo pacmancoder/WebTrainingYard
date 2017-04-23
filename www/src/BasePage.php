@@ -37,7 +37,7 @@
         private $basePage;
         private $user;
         // dependencies
-        private $session;
-        private $db;
+        protected $session;
+        protected $db;
     }
 ?>
