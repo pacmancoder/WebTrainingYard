@@ -74,7 +74,7 @@ function process_login() {
     requestBody["email"] = $("#l_email_field").val();
     requestBody["password"] = $("#l_pass_field").val();
     $.ajax({
-        url: "api/login",
+        url: "/api/login",
         type: "POST",
         data: requestBody,
         complete: function(xhr, status) {
@@ -143,7 +143,7 @@ function process_register() {
     requestBody["lname"] = form.getValue("lname");
     requestBody["phone"] = form.getValue("phone");
     $.ajax({
-        url: "api/register",
+        url: "/api/register",
         type: "POST",
         data: requestBody,
         complete: function(xhr, status) {
@@ -175,8 +175,9 @@ function process_catalog() {
     });
     var categoryStr = $('.__catalog').data('category');
     var pageStr = $('.__catalog').data('page');
+    var filterStr = '';
     if (Object.keys(filters).length > 0) {
-        var filterStr = '';
+        filterStr += '/';
         $.each(filters, function(index, value) {
             if (index != 0) {
                 filterStr += ';';
@@ -185,10 +186,21 @@ function process_catalog() {
         });
         var categoryStr = $('.__catalog').data('category');
         var pageStr = $('.__catalog').data('page');
-        window.location.href = '/index.php/catalog/' + categoryStr + '/' + pageStr + '/' + filterStr;
-    } else {
-        window.location.href = '/index.php/catalog/' + categoryStr + '/' + pageStr;
     }
+    var searchStr = '';
+    if ($('.__catalog').data('search')) {
+        if (!filterStr) {
+            searchStr += '/';
+        }
+        searchStr += '!' + $('.__catalog').data('search');
+    }
+    window.location.href = '/catalog/' + categoryStr + '/' + pageStr + filterStr + searchStr;
+}
+
+function process_search() {
+    $('.__catalog').data('search', $('.__search').val());
+    process_catalog();
+    event.preventDefault();
 }
 
 $(document).ready(function(){

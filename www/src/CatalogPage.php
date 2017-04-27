@@ -5,7 +5,11 @@
     class CatalogPage extends BasePage {
         function __construct($app, $category, $filters, $page) {
             parent::__construct($app);
-            $this->category = $category;
+            if (isset($category)) {
+                $this->category = $category;
+            } else {
+                $this->category = 0;
+            }
             if (isset($page)) {
                 $this->page = $page;
             } else {
@@ -14,14 +18,37 @@
             // parse filters
             $this->filters = array();
             if (isset($filters)) {
-                $filterStrings = explode(";", $filters);                
+                $filterSearchStrings = explode("!", $filters);
+                $filterStrings = explode(";", $filterSearchStrings[0]);                
                 foreach ($filterStrings  as $filterStr) {
                     $filter = explode('=', $filterStr);
                     if (isset($filter[1])) {
                         $this->filters[$filter[0]] = explode(',', $filter[1]);
                     }
                 }
+                if (isset($filterSearchStrings[1])) {
+                    $this->search = $filterSearchStrings[1];
+                    $this->setSearch($this->search);
+                } 
             }
+        }
+
+        function getCategoriesIdRecursive($parentCategory) {
+            $out[] = $parentCategory;
+            $categoryStmt = $this->db->query("SELECT id FROM Category WHERE parent_category = $parentCategory");    
+            $childs = $categoryStmt->fetchAll();
+            $categoryStmt->closeCursor();
+            foreach($childs as $i) {
+                $out = array_merge($out, $this->getCategoriesIdRecursive($i['id']));
+            }
+            return $out;
+        }
+
+        function getChildCategoriesInfo($parentCategory) {
+            $categoryStmt = $this->db->query("SELECT id, name FROM Category WHERE parent_category = $parentCategory");
+            $childs = $categoryStmt->fetchAll();
+            $categoryStmt->closeCursor();
+            return $childs;
         }
 
         function prepareBody() {
@@ -36,6 +63,9 @@
                     "SELECT name, parent_category FROM Category WHERE id = '$parentCategory'");
                 $categoryInfo = $categoryInfoStmt->fetch();
                 $categoryInfoStmt->closeCursor();   
+                if ($categoryInfo['parent_category'] == null) {
+                    break;
+                }
 
                 $nextBreadcrumb = new PageComposer(__DIR__.'/html/catalog_breadcrumb_item.phtml');
                 $nextBreadcrumb 
@@ -45,55 +75,84 @@
                     
                 $breadcrumbHead = $nextBreadcrumb;
                 $parentCategory = $categoryInfo['parent_category'];
-            } while ($parentCategory != null);
+            } while (true);
+
+            // category + childs recursive
+            $recursiveCategory = join(', ', $this->getCategoriesIdRecursive($this->category));
 
             // build filters            
             $filtersInfoStmt = $this->db->query(
                     "SELECT Specification.id, Specification.name ".
                     "FROM Specification ".
                     "JOIN CategoryHasSpecification ON Specification.id = CategoryHasSpecification.specification_id ".
-                    "WHERE CategoryHasSpecification.category_id = '$this->category'"
+                    "WHERE CategoryHasSpecification.category_id IN (" . $this->category. ") "
             );
             $filtersInfo = $filtersInfoStmt->fetchAll();
             $filtersInfoStmt->closeCursor();
 
-            $filtersHead = new PageComposer(null);
-            $currentFilter = $filtersHead;
+            // show panels
+            $panels = '';
+            if (count($filtersInfo) > 0) {
+                $filtersHead = new PageComposer(null);
+                $currentFilter = $filtersHead;
 
-            foreach($filtersInfo as $filter) {                
-                // build cases
-                $filterId = $filter['id'];
-                $casesInfoStmt = $this->db->query(
-                        "SELECT SpecificationCase.id, SpecificationCase.description ".
-                        "FROM Specification ".
-                        "JOIN SpecificationCase ON Specification.id = SpecificationCase.specification_id ".
-                        "WHERE Specification.id = $filterId"
-                );
-                $casesInfo = $casesInfoStmt->fetchAll();
-                $casesInfoStmt->closeCursor();
+                foreach($filtersInfo as $filter) {                
+                    // build cases
+                    $filterId = $filter['id'];
+                    $casesInfoStmt = $this->db->query(
+                            "SELECT SpecificationCase.id, SpecificationCase.description ".
+                            "FROM Specification ".
+                            "JOIN SpecificationCase ON Specification.id = SpecificationCase.specification_id ".
+                            "WHERE Specification.id = $filterId"
+                    );
+                    $casesInfo = $casesInfoStmt->fetchAll();
+                    $casesInfoStmt->closeCursor();
 
-                $casesHead = new PageComposer(null);
-                $currentCase = $casesHead;   
-                foreach($casesInfo as $case) {
-                    $currentCase = $currentCase
-                        ->chain(new PageComposer(__DIR__.'/html/catalog_panel_filter_case.phtml'))
-                        ->compose('id', $case['id'])
-                        ->compose('description', $case['description']);
-                    if (array_key_exists($filter['id'], $this->filters)) {
-                        if (in_array($case['id'], $this->filters[$filter['id']])) {
-                            $currentCase->compose('checked', 'true');
+                    $casesHead = new PageComposer(null);
+                    $currentCase = $casesHead;   
+                    foreach($casesInfo as $case) {
+                        $currentCase = $currentCase
+                            ->chain(new PageComposer(__DIR__.'/html/catalog_panel_filter_case.phtml'))
+                            ->compose('id', $case['id'])
+                            ->compose('description', $case['description']);
+                        if (array_key_exists($filter['id'], $this->filters)) {
+                            if (in_array($case['id'], $this->filters[$filter['id']])) {
+                                $currentCase->compose('checked', 'true');
+                            }
                         }
                     }
+
+                    $currentFilter = $currentFilter
+                        ->chain(new PageComposer(__DIR__.'/html/catalog_panel_filter.phtml'))
+                        ->compose('name', $filter['name'])
+                        ->compose('id', $filter['id'])
+                        ->compose('cases', $casesHead);
                 }
-                         
-                $currentFilter = $currentFilter
-                    ->chain(new PageComposer(__DIR__.'/html/catalog_panel_filter.phtml'))
-                    ->compose('name', $filter['name'])
-                    ->compose('id', $filter['id'])
-                    ->compose('cases', $casesHead);
+                $panels = $filtersHead;
+            } else { // show categories panel
+                $categoriesInfo = $this->getChildCategoriesInfo($this->category);
+                if (count($categoriesInfo) > 0) {
+                    $categoriesPanel = new PageComposer(__DIR__.'/html/catalog_panel_categories.phtml');
+                    $categoriesHead = new PageComposer(null);
+                    $currentCategory = $categoriesHead;
+                    foreach($categoriesInfo as $categoryInfo) {
+                        $currentCategory = $currentCategory
+                            ->chain(new PageComposer(__DIR__.'/html/catalog_panel_categories_item.phtml'))
+                            ->compose('id', $categoryInfo['id'])
+                            ->compose('name', $categoryInfo['name']);
+                    }
+                    $categoriesPanel->compose('items', $categoriesHead);
+                    $panels = $categoriesPanel;
+                }
             }
 
+            // build filter conditions for queries
             $filterConditions = '';
+            if (isset($this->search)) {
+                $filterConditions .= 
+                    "AND (Item.name LIKE '%" . $this->search . 
+                        "%' OR Item.description LIKE '%" . $this->search . "%') ";
+            }
             $mergedCases = array();
             foreach ($this->filters as $filterToMerge) {
                 $mergedCases = array_merge($mergedCases, $filterToMerge);
@@ -116,14 +175,15 @@
             } else {
                 $currentPaginationItem->compose('state', 'disabled');
             }
+
             // prepare query for Item count
             $itemsCountQuery = 
                 "SELECT COUNT(*) as `count` FROM Item ".
                 "JOIN ItemSpecification ON Item.id = ItemSpecification.item_id ".
                 "WHERE Item.available > 0 ".
-                "AND Item.category_id = " . $this->category . " ".
+                "AND Item.category_id IN (" . $recursiveCategory  . ") ".
                 $filterConditions.
-                "GROUP BY Item.id ";  
+                "GROUP BY Item.id HAVING COUNT(Item.id) >= ". count($this->filters) . ' ';  
             
             // get max page index
             $itemCountStmt = $this->db->query($itemsCountQuery);
@@ -167,12 +227,12 @@
                 "JOIN (SELECT Item_id, url FROM Media WHERE priority = 0) Media ON Item.id = Media.Item_id ".
                 "JOIN ItemSpecification ON Item.id = ItemSpecification.item_id ".
                 "WHERE Item.available > 0 ".
-                "AND Item.category_id = " . $this->category . " ".
+                "AND Item.category_id IN (" . $recursiveCategory  . ") ".
                 $filterConditions;
             // filters for query
             $itemsQuery .= $filterConditions;
             // ignore joined ItemSpecification
-            $itemsQuery .= 'GROUP BY Item.id ';       
+            $itemsQuery .= 'GROUP BY Item.id HAVING COUNT(Item.id) >= '. count($this->filters) . ' ';       
             // limit for page     
             $pageOffset = self::ITEMS_ON_PAGE * $this->page;
             $pageLimit = self::ITEMS_ON_PAGE;
@@ -195,15 +255,17 @@
                     ->compose('mediaLink', '/img/'.$currentItem['mediaLink']);
             }
 
-            $body->compose('filters', $filtersHead)
+            $searchFragment = isset($this->search) ? $this->search : '';
+
+            $body->compose('panels', $panels)
                  ->compose('itemCards', $itemCardsHead)
                  ->compose('paginationItems', $paginationHead)
                  ->compose('breadcrumbItems', $breadcrumbHead)
                  ->compose('category', $this->category)
-                 ->compose('page', $this->page);
+                 ->compose('page', $this->page)           
+                 ->compose('search', $searchFragment);
 
             return $body->render();
-
         }
 
         // constants
@@ -213,6 +275,7 @@
         // Private fields
         private $category;
         private $filters;
+        private $search;
         private $page;
     }
 ?>

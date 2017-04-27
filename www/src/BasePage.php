@@ -4,6 +4,9 @@
     abstract class BasePage {
         function __construct($app) {
             $this->basePage = new PageComposer(__DIR__.'/html/base_page.phtml');
+            $this->basePage
+                ->compose('search', '');
+
             $this->session = $app->session;
             $this->db = $app->db;
             // save user info. TODO: refactoring, incapsulate?
@@ -29,6 +32,10 @@
 
         function render() {
             echo $this->basePage->render();
+        }
+
+        function setSearch($value) {
+            $this->basePage->compose('search', $value);
         }
 
         abstract function prepareBody();

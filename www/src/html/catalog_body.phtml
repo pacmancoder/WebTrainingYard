@@ -1,13 +1,14 @@
-<div class="row __catalog" data-category=<?php echo $category; ?> data-page=<?php echo $page; ?> >
+<div class="row __catalog" data-category=<?php echo $category; ?> data-page=<?php echo $page; ?> data-search=<?php echo $search; ?>>
     <div class="col-sm-4 col-md-3" style="margin-top: 15px;">
-        <div class="panel-group" id="accordion">
-            <?php echo $filters; ?>
+        <div class="panel-group">
+            <?php echo $panels; ?>
         </div>
     </div>
 
     <div class="col-sm-8 col md-9"  style="margin-top: 25px;">
         <div class="row">
             <ol class="breadcrumb">
+                <li><a href="/">PCBuilder</a>
                 <?php echo $breadcrumbItems; ?>
             </ol>
         </div>
