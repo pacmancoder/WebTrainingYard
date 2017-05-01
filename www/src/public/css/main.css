@@ -1,0 +1,36 @@
+.item-image {
+    width: 90%;
+    display:block;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.imagePlaceholder {   
+    position: relative; 
+    display:block;
+    height:400px;
+    width:400px;
+    padding: 5%;
+    margin: 0 auto;
+}
+
+/* Removes the default 20px margin and creates some padding space for the indicators and controls */
+.carousel {
+    margin-bottom: 0;
+	padding: 20px 30px 20px 30px;
+}
+/* Reposition the controls slightly */
+.carousel-control.left {
+    top: 30%;
+	left: -12px;
+    background-image: none;
+    color: #000;
+}
+.carousel-control.right {
+    top: 30%;
+	right: -12px;
+    background-image: none;
+    color: #000;
+}

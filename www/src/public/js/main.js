@@ -219,5 +219,11 @@ $(document).ready(function(){
             $('.__catalog').data('page', parseInt($(this).text().trim()) - 1);
         }
         process_catalog();
+    });
+    $(".__carousel-item>img").click(function() {
+        $("#__item-image").attr('src', $(this).data('hd-url')); 
     });  
+    $('#myCarousel').carousel({
+	    interval: 10000
+	});
 });

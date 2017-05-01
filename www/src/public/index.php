@@ -5,6 +5,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../CatalogPage.php';
+require_once __DIR__.'/../ItemPage.php';
 
 $app = new \Slim\App;
 
@@ -37,6 +38,14 @@ $app->get('/catalog[/{category}[/{page}[/{filter}]]]', function (Request $reques
         $request->getAttribute('category'), 
         $request->getAttribute('filter'),
         $request->getAttribute('page'));
+    $page->prepare()->render();
+    return $response;
+});
+
+$app->get('/item/{id}', function (Request $request, Response $response) {
+    $page = new ItemPage(
+        $this,
+        $request->getAttribute('id'));
     $page->prepare()->render();
     return $response;
 });

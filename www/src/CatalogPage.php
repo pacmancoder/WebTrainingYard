@@ -1,6 +1,8 @@
 <?php
     require_once __DIR__.'/BasePage.php';
     require_once __DIR__.'/PageComposer.php';
+    require_once __DIR__.'/Utils.php';
+    require_once __DIR__.'/BreadcrumbBuilder.php';
 
     class CatalogPage extends BasePage {
         function __construct($app, $category, $filters, $page) {
@@ -33,52 +35,15 @@
             }
         }
 
-        function getCategoriesIdRecursive($parentCategory) {
-            $out[] = $parentCategory;
-            $categoryStmt = $this->db->query("SELECT id FROM Category WHERE parent_category = $parentCategory");    
-            $childs = $categoryStmt->fetchAll();
-            $categoryStmt->closeCursor();
-            foreach($childs as $i) {
-                $out = array_merge($out, $this->getCategoriesIdRecursive($i['id']));
-            }
-            return $out;
-        }
-
-        function getChildCategoriesInfo($parentCategory) {
-            $categoryStmt = $this->db->query("SELECT id, name FROM Category WHERE parent_category = $parentCategory");
-            $childs = $categoryStmt->fetchAll();
-            $categoryStmt->closeCursor();
-            return $childs;
-        }
-
         function prepareBody() {
             $body = new PageComposer(__DIR__.'/html/catalog_body.phtml');
             
             // build breadcrumb
-            $breadcrumbHead = new PageComposer(null);
-            $parentCategory = $this->category;
-
-            do {
-                $categoryInfoStmt = $this->db->query(
-                    "SELECT name, parent_category FROM Category WHERE id = '$parentCategory'");
-                $categoryInfo = $categoryInfoStmt->fetch();
-                $categoryInfoStmt->closeCursor();   
-                if ($categoryInfo['parent_category'] == null) {
-                    break;
-                }
-
-                $nextBreadcrumb = new PageComposer(__DIR__.'/html/catalog_breadcrumb_item.phtml');
-                $nextBreadcrumb 
-                    ->compose('id', $parentCategory)
-                    ->compose('name', $categoryInfo['name'])
-                    ->chain($breadcrumbHead);
-                    
-                $breadcrumbHead = $nextBreadcrumb;
-                $parentCategory = $categoryInfo['parent_category'];
-            } while (true);
+            $breadcrumbBuilder = new BreadcrumbBuilder($this->db, $this->category);
+            $breadcrumb = $breadcrumbBuilder->render();
 
             // category + childs recursive
-            $recursiveCategory = join(', ', $this->getCategoriesIdRecursive($this->category));
+            $recursiveCategory = join(', ', Utils::getCategoriesIdRecursive($this->db, $this->category));
 
             // build filters            
             $filtersInfoStmt = $this->db->query(
@@ -130,7 +95,7 @@
                 }
                 $panels = $filtersHead;
             } else { // show categories panel
-                $categoriesInfo = $this->getChildCategoriesInfo($this->category);
+                $categoriesInfo = Utils::getChildCategoriesInfo($this->db, $this->category);
                 if (count($categoriesInfo) > 0) {
                     $categoriesPanel = new PageComposer(__DIR__.'/html/catalog_panel_categories.phtml');
                     $categoriesHead = new PageComposer(null);
@@ -260,7 +225,7 @@
             $body->compose('panels', $panels)
                  ->compose('itemCards', $itemCardsHead)
                  ->compose('paginationItems', $paginationHead)
-                 ->compose('breadcrumbItems', $breadcrumbHead)
+                 ->compose('breadcrumb', $breadcrumb)
                  ->compose('category', $this->category)
                  ->compose('page', $this->page)           
                  ->compose('search', $searchFragment);
