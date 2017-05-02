@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-xs-4">
+        <h3>User info</h3>
+        <strong>First name:</strong> <?php echo $fname; ?><br>
+        <strong>Last name:</strong> <?php echo $lname; ?> <br>
+        <strong>Email:</strong> <?php echo $email; ?> <br>
+        <strong>Phone:</strong> <?php echo $phone; ?> <br>          
+        <h3>Change password:</h3>
+        <form>
+            <div class="form-group" id="p_pass_form_group">
+                <label for="p_pass_field">Password:</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" class="form-control" id="p_pass_field" placeholder="New password"/>
+                </div>
+            </div>
+            <div class="form-group" id="p_rpass_form_group">
+                <label for="p_rpass_field">Repeat password:</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" class="form-control" id="p_rpass_field" placeholder="Repeat new password" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-block btn-default" onclick="process_change_password()">Change password</button>
+        </form>
+        <div class="alert hidden" id="p_alert" style="margin-top: 10px">
+        <!-- Content will be set at runtime  -->
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <h3>Orders</h3>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h4>Order #1111</h4>
+                            <strong>Date:</strong> 12.23.2017<br>
+                            <strong>Last updated:</strong> 12.25.2017<br>
+                            <strong>Status:</strong><br>
+                            sdgfsdfsfsd
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>Items</h4>   
+                            <a href="#">Intel Core i7 7700K</a> x1<br>
+                            <a href="#">Intel Core i7 7600K</a> x2<br>
+                            <a href="#">Intel Core i7 7500</a> x1<br>
+                            <a href="#">AMD Ryzen 7 1800X</a> x5<br>
+                            <a href="#">Intel Core i7 7300K</a> x1<br>                         
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h4>Order #1111</h4>
+                            <strong>Date:</strong> 12.23.2017<br>
+                            <strong>Last updated:</strong> 12.25.2017<br>
+                            <strong>Status:</strong><br>
+                            sdgfsdfsfsd
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>Items</h4>   
+                            <a href="#">Intel Core i7 7700K</a> x1<br>
+                            <a href="#">Intel Core i7 7600K</a> x2<br>
+                            <a href="#">Intel Core i7 7500</a> x1<br>
+                            <a href="#">AMD Ryzen 7 1800X</a> x5<br>
+                            <a href="#">Intel Core i7 7300K</a> x1<br>                         
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h4>Order #1111</h4>
+                            <strong>Date:</strong> 12.23.2017<br>
+                            <strong>Last updated:</strong> 12.25.2017<br>
+                            <strong>Status:</strong><br>
+                            sdgfsdfsfsd
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>Items</h4>   
+                            <a href="#">Intel Core i7 7700K</a> x1<br>
+                            <a href="#">Intel Core i7 7600K</a> x2<br>
+                            <a href="#">Intel Core i7 7500</a> x1<br>
+                            <a href="#">AMD Ryzen 7 1800X</a> x5<br>
+                            <a href="#">Intel Core i7 7300K</a> x1<br>                         
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="pager">
+                <li class="previous"><a href="#">&larr; Older</a></li>
+                <li class="next"><a href="#">Newer &rarr;</a></li>
+            </ul>
+        </nav>                 
+
+    </div>
+</div>

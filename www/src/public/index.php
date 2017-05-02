@@ -6,6 +6,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../CatalogPage.php';
 require_once __DIR__.'/../ItemPage.php';
+require_once __DIR__.'/../ProfilePage.php';
 
 $app = new \Slim\App;
 
@@ -50,6 +51,14 @@ $app->get('/item/{id}', function (Request $request, Response $response) {
     return $response;
 });
 
+$app->get('/profile[/orders/{page}]', function (Request $request, Response $response) {
+    $page = new ProfilePage(
+        $this,
+        $request->getAttribute('page'));
+    $page->prepare()->render();
+    return $response;    
+});
+
 $app->get('/api/logout', function (Request $request, Response $response) {
 	$session = $this->session;
 	$session::destroy();
@@ -76,6 +85,35 @@ $app->post('/api/login', function (Request $request, Response $response) {
     } else {
         $session->uid = $dbUser['id'];
         $responseBody->write("OK");
+    }
+    return $response;
+});
+
+$app->get('/api/reserve/{id}', function (Request $request, Response $response) {
+    $session = $this->session;
+    $db = $this->db;
+    $responseBody = $response->getBody();    
+    if (!isset($session->uid)) {
+        die;
+    } else {
+        $user_id = $session->uid;
+        $item = $request->getAttribute('id');
+        try {
+            $db->exec("CALL AddToCart($user_id, $item, 1)");
+            $responseBody->write("OK");
+        } catch (PDOException $e) {
+            switch ($e->getCode()) {
+                case 45000:
+                    $responseBody->write("NOT AVAILABLE");
+                    break;
+                case 23000:
+                    $responseBody->write("ALREADY IN CART");
+                    break;                    
+                default:
+                    $responseBody->write("SERVER ERROR");
+            }
+            
+        }
     }
     return $response;
 });
@@ -113,6 +151,16 @@ $app->post('/api/register', function (Request $request, Response $response) {
         $responseBody->write("OK");
     }
     return $response;
+});
+
+$app->post('/api/chpass', function (Request $request, Response $response) {
+	$session = $this->session;
+    $db = $this->db;
+    $newPass = password_hash($request->getParsedBody()['pass'], PASSWORD_DEFAULT);    
+    $id = $session->uid;
+    $db->exec("UPDATE User SET password_hash = \"$newPass\" WHERE id = $id");
+    $responseBody = $response->getBody(); 
+    $responseBody->write("OK");       
 });
 
 $app->run();

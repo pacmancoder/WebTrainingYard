@@ -35,6 +35,12 @@
                     "WHERE itemSpecification.item_id = $id");
             $this->specifications = $specificationsStmt->fetchAll();
             $specificationsStmt->closeCursor();
+
+            if (isset($this->user)) {
+                $user_id = $this->user['id'];
+
+                $this->db->exec("CALL ViewItem($user_id, $id)");
+            }
         }
 
         private function buildCarousel() {
@@ -96,6 +102,7 @@
                 ->compose('price', $this->itemInfo['price'])
                 ->compose('carouselSlides', $this->buildCarousel())                
                 ->compose('specifications', $this->buildSpecifications())
+                ->compose('id', $this->id)
                 ->render();
         }
 

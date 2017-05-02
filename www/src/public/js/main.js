@@ -203,6 +203,82 @@ function process_search() {
     event.preventDefault();
 }
 
+function process_change_password() {
+    if (!$("#p_pass_field").val()) {
+        return;
+    }
+    if (!Validator.isPassword($("#p_pass_field").val())) {
+        $("#p_alert").removeClass("hidden");
+        $("#p_alert").addClass("alert-danger");
+        $("#p_alert").text("Too short password");
+        return;
+    }
+    if ($("#p_pass_field").val() != $("#p_rpass_field").val()) {
+        $("#p_alert").removeClass("hidden");
+        $("#p_alert").addClass("alert-danger");
+        $("#p_alert").removeClass("alert-success");        
+        $("#p_alert").text("Passwords are different");
+        return;
+    }
+    // Build AJAX request
+    var requestBody = {};
+    requestBody["pass"] = $("#p_pass_field").val();
+    $.ajax({
+        url: "/api/chpass",
+        type: "POST",
+        data: requestBody,
+        complete: function(xhr, status) {
+            switch(xhr.responseText) {
+                case "OK":
+                    $("#p_alert").removeClass("hidden");
+                    $("#p_alert").addClass("alert-success");
+                    $("#p_alert").removeClass("alert-danger");           
+                    $("#p_alert").text("Password was changed");
+                    break;
+                default:
+                    $("#p_alert").removeClass("hidden");
+                    $("#p_alert").addClass("alert-danger");
+                    $("#p_alert").removeClass("alert-success");        
+                    $("#p_alert").text("Server error");
+            }
+        }
+    });    
+}
+
+function process_reserve_item(item) {
+    $.ajax({
+        url: "/api/reserve/" + item,
+        type: "GET",
+        complete: function(xhr, status) {
+            switch(xhr.responseText) {
+                case "OK":
+                    $("#__cart_alert").removeClass("hidden");
+                    $("#__cart_alert").removeClass("alert-danger");
+                    $("#__cart_alert").addClass("alert-success");
+                    $("#__cart_alert").text("Item was added to your cart!");
+                    break;
+                case "NOT AVAILABLE":
+                    $("#__cart_alert").removeClass("hidden");                
+                    $("#__cart_alert").removeClass("alert-success");
+                    $("#__cart_alert").addClass("alert-danger");
+                    $("#__cart_alert").text("All available items were reserved, try later!");
+                    break;                
+                case "ALREADY IN CART": 
+                    $("#__cart_alert").removeClass("hidden");                
+                    $("#__cart_alert").removeClass("alert-success");
+                    $("#__cart_alert").addClass("alert-danger");
+                    $("#__cart_alert").text("Item already in shopping cart!");
+                    break;                                
+                default:
+                    $("#__cart_alert").removeClass("hidden");                
+                    $("#__cart_alert").removeClass("alert-success");
+                    $("#__cart_alert").addClass("alert-danger");
+                    $("#__cart_alert").text("Server error!");
+            }
+        }
+    });  
+}
+
 $(document).ready(function(){
     $(".__pagination-item").click(function() {
         if ($(this).hasClass('disabled')) {

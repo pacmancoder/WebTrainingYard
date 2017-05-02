@@ -42,7 +42,7 @@
 
         // template manager
         private $basePage;
-        private $user;
+        protected $user;
         // dependencies
         protected $session;
         protected $db;

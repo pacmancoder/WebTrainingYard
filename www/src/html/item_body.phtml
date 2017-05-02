@@ -24,6 +24,12 @@
       </div>
     </div>
     <div class="col-xs-12 col-md-6">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="alert alert-success hidden" id="__cart_alert">
+            </div>
+          </div>
+        </div>
         <div class="row">   
           <div class="col-xs-6">       
             <h3>
@@ -36,10 +42,12 @@
             <span class="pull-right align-middle">
               <h2 style="display:inline-block"><?php echo $price; ?>$</h2>
               &nbsp;&nbsp;
-              <button type="button" class="btn btn-lg btn-primary ">
+              <button type="button" 
+                class="btn btn-lg btn-primary "
+                onclick="process_reserve_item(<?php echo $id?>)">
                 <span class="glyphicon glyphicon-shopping-cart"></span>
                 Buy
-              </button>
+              </button>              
             </span>
           </div>                                       
         </div>
@@ -62,4 +70,3 @@
     </table>
   </div>
 </div>
-

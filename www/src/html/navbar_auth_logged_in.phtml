@@ -1,9 +1,21 @@
 <ul class="nav navbar-nav navbar-right">
     <li>
         <span class="navbar-text">
-            <?php echo 'Hello, ' . $firstName; ?>
+            Hello,&nbsp;<strong><?php echo $firstName; ?></strong>
         </span>
     </li>
+    <li>
+        <a href="/profile">
+            <span class="glyphicon glyphicon-home"></span>
+            Profile
+        </a>
+    </li>       
+    <li>
+        <a href="/cart">
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+            Shopping cart <span class="badge">0</span>
+        </a>
+    </li>    
     <li>
         <a href="/api/logout">
             <span class="glyphicon glyphicon-user"></span>
