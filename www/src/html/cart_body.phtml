@@ -1,3 +1,23 @@
 <div class="row">
+    <h3>Shopping Cart</h3>
+</div>
 
+<div class="row">
+    <?php echo $items ?>
+</div>
+
+<div class="row">
+    <div class="pull-right">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="__warehouse"><h3>Warehouse:</h3></label>
+                <select class="form-control input-lg" id="__warehouse">
+                    <?php echo $warehouses?>
+                </select>
+                <button class="btn btn-lg btn-success" type="button" onclick="orderCartItems()">
+                    <span class="glyphicon glyphicon-shopping-cart"></span> Order
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

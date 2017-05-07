@@ -216,7 +216,7 @@
                     ->compose('id', $currentItem['id'])
                     ->compose('name', $currentItem['name'])
                     ->compose('description', $currentItem['description'])
-                    ->compose('price', $currentItem['price'] . ' $')
+                    ->compose('price', $currentItem['price'])
                     ->compose('mediaLink',  isset($currentItem['mediaLink'])?'/img/'.$currentItem['mediaLink']:'/img/noimage.jpg');
             }
 

@@ -35,10 +35,34 @@
         }
 
         function getOrderItems($db, $order) {
-            $itemsStmt = $db->query("SELECT item_id as id, Item.name AS name, quantity FROM OrderItem JOIN Item ON item_id = Item.id WHERE order_id = $order;");
+            $itemsStmt = $db->query("SELECT item_id as id, Item.name AS name, quantity, OrderItem.price AS price FROM OrderItem JOIN Item ON item_id = Item.id WHERE order_id = $order;");
             $items = $itemsStmt->fetchAll();
             $itemsStmt->closeCursor();
             return $items;                        
+        }
+
+        function delCartItem($db, $user, $item) {
+            $db->exec("DELETE FROM ShoppingCartItem WHERE user_id = $user AND item_id = $item");
+        }
+
+        function getWarehouses($db) {
+            $warehousesStmt = $db->query("SELECT id, name FROM Warehouse WHERE is_transport != TRUE");
+            $warehouses = $warehousesStmt->fetchAll();
+            $warehousesStmt->closeCursor();
+            return $warehouses;   
+        }
+
+        function getCartItems($db, $user) {
+            $itemsStmt = $db->query(
+                "SELECT ShoppingCartItem.item_id as id, Item.name AS name, quantity, Item.price AS price, ".
+                "Media.url AS image FROM ShoppingCartItem JOIN Item ON ShoppingCartItem.item_id = Item.id ".
+                "LEFT JOIN (SELECT * FROM Media WHERE Media.priority = 0) AS Media ON Media.item_id = ShoppingCartItem.item_id ".
+                "WHERE user_id = $user ".
+                "GROUP BY ShoppingCartItem.item_id "
+            );
+            $items = $itemsStmt->fetchAll();
+            $itemsStmt->closeCursor();
+            return $items;  
         }
 
     }

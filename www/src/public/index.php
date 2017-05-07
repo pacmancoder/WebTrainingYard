@@ -7,6 +7,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../CatalogPage.php';
 require_once __DIR__.'/../ItemPage.php';
 require_once __DIR__.'/../ProfilePage.php';
+require_once __DIR__.'/../CartPage.php';
 
 $app = new \Slim\App;
 
@@ -59,10 +60,27 @@ $app->get('/profile[/orders/{page}]', function (Request $request, Response $resp
     return $response;    
 });
 
+$app->get('/cart[/remove/{delItem}]', function (Request $request, Response $response) {
+    $page = new CartPage(
+        $this,
+        $request->getAttribute('delItem'));
+    $page->prepare()->render();
+    return $response;    
+});
+
 $app->get('/api/logout', function (Request $request, Response $response) {
 	$session = $this->session;
 	$session::destroy();
 	return $response->withRedirect('/');
+});
+
+$app->get('/api/orderItems/{warehouse}', function (Request $request, Response $response) {
+	$session = $this->session;
+    $db = $this->db;
+    $uid = $session->uid;
+    $warehouse =  $request->getAttribute('warehouse');
+	$db->exec("CALL OrderCart($uid, $warehouse)");
+	return $response->withRedirect('/profile');
 });
 
 $app->post('/api/login', function (Request $request, Response $response) {

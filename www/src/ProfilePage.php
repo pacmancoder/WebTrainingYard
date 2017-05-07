@@ -48,13 +48,17 @@
                 $items = Utils::getOrderItems($this->db, $order['id']);
                 $itemsHead = new PageComposer(null);
                 $currentItem = $itemsHead;
+                $fullCost = 0;
                 foreach($items as $item) {
+                    $fullCost += $item['price'];
                     $currentItem = $currentItem
                         ->chain(new PageComposer(__DIR__."/html/profile_order_item.phtml"))
                         ->compose('id', $item['id'])
                         ->compose('name', $item['name'])
+                        ->compose('cost', $item['price'] * $item['quantity'])
                         ->compose('quantity', $item['quantity']);
                 }
+
                 $currentOrder = $currentOrder
                     ->chain(new PageComposer(__DIR__."/html/profile_order.phtml"))
                     ->compose('id', $order['id'])
@@ -62,6 +66,7 @@
                     ->compose('statusClass', $statusClass)
                     ->compose('created_at', $order['created_at'])
                     ->compose('updated_at', $order['updated_at'])
+                    ->compose('fullCost', $fullCost)
                     ->compose('items', $itemsHead);
             }
             return $body

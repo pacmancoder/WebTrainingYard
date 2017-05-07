@@ -285,6 +285,14 @@ function process_reserve_item(item) {
     });  
 }
 
+function delCartItem(id) {
+    window.location.href = '/cart/remove/' + id;
+}
+
+function orderCartItems(id) {
+    window.location.href = '/api/orderItems/' + $('#__warehouse option:selected').data('id');
+}
+
 $(document).ready(function(){
     $(".__pagination-item").click(function() {
         if ($(this).hasClass('disabled')) {
@@ -307,5 +315,5 @@ $(document).ready(function(){
     });  
     $('#myCarousel').carousel({
 	    interval: 10000
-	});
+	});        
 });
