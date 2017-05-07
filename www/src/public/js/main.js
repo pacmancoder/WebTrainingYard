@@ -261,7 +261,7 @@ function process_reserve_item(item) {
                     $("#__cart_alert").removeClass("hidden");                
                     $("#__cart_alert").removeClass("alert-success");
                     $("#__cart_alert").addClass("alert-danger");
-                    $("#__cart_alert").text("All available items were reserved, try later!");
+                    $("#__cart_alert").text("All available items were reserved, try again later!");
                     break;                
                 case "ALREADY IN CART": 
                     $("#__cart_alert").removeClass("hidden");                
@@ -269,11 +269,17 @@ function process_reserve_item(item) {
                     $("#__cart_alert").addClass("alert-danger");
                     $("#__cart_alert").text("Item already in shopping cart!");
                     break;                                
+                case "NOT LOGGED IN":
+                    $("#__cart_alert").removeClass("hidden");                
+                    $("#__cart_alert").removeClass("alert-success");
+                    $("#__cart_alert").addClass("alert-danger");
+                    $("#__cart_alert").text("Please sign in before ordering items!");
+                    break;
                 default:
                     $("#__cart_alert").removeClass("hidden");                
                     $("#__cart_alert").removeClass("alert-success");
                     $("#__cart_alert").addClass("alert-danger");
-                    $("#__cart_alert").text("Server error!");
+                    $("#__cart_alert").text("Server error");
             }
         }
     });  

@@ -11,6 +11,7 @@
             $itemStmt = $this->db->query(
                 "SELECT Item.name, ".
                     "Item.available, ".
+                    "Item.reserved, ".
                     "Item.category_id AS category, ".
                     "Item.description AS description, ".
                     "Item.price AS price, ".
@@ -49,28 +50,33 @@
 
             $itemsAdded = 4;
             $first = true;
-            foreach($this->media as $image) {
-                if ($itemsAdded >= 4) {
-                    if (!$first) {
-                        $currentSlide->compose('items', $itemsHead);
-                    }
-                    $itemsHead = new PageComposer(null);
-                    $currentItem = $itemsHead;         
 
-                    $currentSlide = $currentSlide
-                        ->chain(new PageComposer(__DIR__.'/html/item_carousel_slide.phtml'));
+            if (count($this->media) > 0) {
+                foreach($this->media as $image) {
+                    if ($itemsAdded >= 4) {
+                        if (!$first) {
+                            $currentSlide->compose('items', $itemsHead);
+                        }
+                        $itemsHead = new PageComposer(null);
+                        $currentItem = $itemsHead;         
 
-                    if ($first) {
-                        $currentSlide->compose('active', true);
+                        $currentSlide = $currentSlide
+                            ->chain(new PageComposer(__DIR__.'/html/item_carousel_slide.phtml'));
+
+                        if ($first) {
+                            $currentSlide->compose('active', true);
+                        }
+                        $itemsAdded = 0;
+                        $first = false;
                     }
-                    $itemsAdded = 0;
-                    $first = false;
+                    $currentItem = $currentItem
+                        ->chain(new PageComposer(__DIR__.'/html/item_carousel_item.phtml'))
+                        ->compose('thumbnailUrl', $image['url'])
+                        ->compose('hdUrl', $image['url_hd']);
+                    $itemsAdded++;
                 }
-                $currentItem = $currentItem
-                    ->chain(new PageComposer(__DIR__.'/html/item_carousel_item.phtml'))
-                    ->compose('thumbnailUrl', $image['url'])
-                    ->compose('hdUrl', $image['url_hd']);
-                $itemsAdded++;
+            } else {
+                $itemsHead = new PageComposer(null);
             }
             $currentSlide->compose('items', $itemsHead);    
             return $carouselHead;
@@ -97,7 +103,8 @@
                 ->compose('breadcrumb', $breadcrumb)
                 ->compose('name', $this->itemInfo['name'])
                 ->compose('available', $this->itemInfo['available'])
-                ->compose('image', $this->itemInfo['image'])
+                ->compose('reserved', $this->itemInfo['reserved'])
+                ->compose('image', isset($this->itemInfo['image'])?($this->itemInfo['image']):'noimage.jpg')
                 ->compose('description', $this->itemInfo['description'])
                 ->compose('price', $this->itemInfo['price'])
                 ->compose('carouselSlides', $this->buildCarousel())                

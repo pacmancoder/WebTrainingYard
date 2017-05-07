@@ -144,7 +144,7 @@
             // prepare query for Item count
             $itemsCountQuery = 
                 "SELECT COUNT(*) as `count` FROM Item ".
-                "JOIN ItemSpecification ON Item.id = ItemSpecification.item_id ".
+                "LEFT JOIN ItemSpecification ON Item.id = ItemSpecification.item_id ".
                 "WHERE Item.available > 0 ".
                 "AND Item.category_id IN (" . $recursiveCategory  . ") ".
                 $filterConditions.
@@ -189,8 +189,8 @@
             $itemsQuery = 
                 "SELECT Item.id, Item.name, Item.price, Item.description, Media.url AS `mediaLink` ".
                 "FROM Item ".
-                "JOIN (SELECT Item_id, url FROM Media WHERE priority = 0) Media ON Item.id = Media.Item_id ".
-                "JOIN ItemSpecification ON Item.id = ItemSpecification.item_id ".
+                "LEFT JOIN (SELECT Item_id, url FROM Media WHERE priority = 0) Media ON Item.id = Media.Item_id ".
+                "LEFT JOIN ItemSpecification ON Item.id = ItemSpecification.item_id ".
                 "WHERE Item.available > 0 ".
                 "AND Item.category_id IN (" . $recursiveCategory  . ") ".
                 $filterConditions;
@@ -217,7 +217,7 @@
                     ->compose('name', $currentItem['name'])
                     ->compose('description', $currentItem['description'])
                     ->compose('price', $currentItem['price'] . ' $')
-                    ->compose('mediaLink', '/img/'.$currentItem['mediaLink']);
+                    ->compose('mediaLink',  isset($currentItem['mediaLink'])?'/img/'.$currentItem['mediaLink']:'/img/noimage.jpg');
             }
 
             $searchFragment = isset($this->search) ? $this->search : '';

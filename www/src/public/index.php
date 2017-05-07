@@ -94,13 +94,13 @@ $app->get('/api/reserve/{id}', function (Request $request, Response $response) {
     $db = $this->db;
     $responseBody = $response->getBody();    
     if (!isset($session->uid)) {
-        die;
+        $responseBody->write("NOT LOGGED IN");
     } else {
         $user_id = $session->uid;
         $item = $request->getAttribute('id');
         try {
             $db->exec("CALL AddToCart($user_id, $item, 1)");
-            $responseBody->write("OK");
+            $responseBody->write("OK");            
         } catch (PDOException $e) {
             switch ($e->getCode()) {
                 case 45000:
@@ -111,8 +111,7 @@ $app->get('/api/reserve/{id}', function (Request $request, Response $response) {
                     break;                    
                 default:
                     $responseBody->write("SERVER ERROR");
-            }
-            
+            }            
         }
     }
     return $response;
