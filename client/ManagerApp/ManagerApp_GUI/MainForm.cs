@@ -20,8 +20,20 @@ namespace ManagerApp_GUI
 
         private void CategoryManagerButton_Click(object sender, EventArgs e)
         {
-            CategoryManagerForm childForm = new CategoryManagerForm();
-            childForm.Show();
+            Form childForm = new CategoryManagerForm();
+            childForm.ShowDialog();
+        }
+
+        private void ItemManagerButton_Click(object sender, EventArgs e)
+        {
+            Form childForm = new ItemForm();
+            childForm.ShowDialog();
+        }
+
+        private void OrderManagerButton_Click(object sender, EventArgs e)
+        {
+            Form childForm = new OrderManagerForm();
+            childForm.ShowDialog();
         }
     }
 }

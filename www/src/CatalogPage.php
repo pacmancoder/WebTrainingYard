@@ -10,7 +10,7 @@
             if (isset($category)) {
                 $this->category = $category;
             } else {
-                $this->category = 0;
+                $this->category = 1;
             }
             if (isset($page)) {
                 $this->page = $page;

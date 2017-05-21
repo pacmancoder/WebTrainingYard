@@ -52,6 +52,18 @@
     <Compile Include="CategoryManagerForm.Designer.cs">
       <DependentUpon>CategoryManagerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FilterManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterManagerForm.Designer.cs">
+      <DependentUpon>FilterManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemForm.Designer.cs">
+      <DependentUpon>ItemForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,14 +71,35 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\CategoryMnager.cs" />
+    <Compile Include="Model\FilterManager.cs" />
+    <Compile Include="Model\ItemManager.cs" />
+    <Compile Include="Model\OrderManager.cs" />
+    <Compile Include="OrderManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OrderManagerForm.Designer.cs">
+      <DependentUpon>OrderManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ICategoryManagerView.cs" />
+    <Compile Include="View\IFilterManagerView.cs" />
+    <Compile Include="View\IItemManagerView.cs" />
+    <Compile Include="View\IOrderManagerView.cs" />
     <EmbeddedResource Include="CategoryManagerForm.resx">
       <DependentUpon>CategoryManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FilterManagerForm.resx">
+      <DependentUpon>FilterManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemForm.resx">
+      <DependentUpon>ItemForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OrderManagerForm.resx">
+      <DependentUpon>OrderManagerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -8,3 +8,6 @@ C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\Mana
 C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.pdb
 C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.MainForm.resources
 C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.CategoryManagerForm.resources
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.FilterManagerForm.resources
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.ItemForm.resources
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.OrderManagerForm.resources

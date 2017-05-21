@@ -51,6 +51,7 @@
             this.ItemManagerButton.TabStop = false;
             this.ItemManagerButton.Text = "Item manager";
             this.ItemManagerButton.UseVisualStyleBackColor = false;
+            this.ItemManagerButton.Click += new System.EventHandler(this.ItemManagerButton_Click);
             // 
             // OrderManagerButton
             // 
@@ -64,6 +65,7 @@
             this.OrderManagerButton.TabStop = false;
             this.OrderManagerButton.Text = "Customer Orders";
             this.OrderManagerButton.UseVisualStyleBackColor = false;
+            this.OrderManagerButton.Click += new System.EventHandler(this.OrderManagerButton_Click);
             // 
             // CategoryManagerButton
             // 

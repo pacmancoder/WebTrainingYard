@@ -28,7 +28,7 @@
 
         function getOrders($db, $user, $page, $itemsOnPage) {
             $start = $itemsOnPage * $page;            
-            $ordersStmt = $db->query("SELECT id, status, created_at, updated_at FROM `Order` WHERE user_id = $user LIMIT $start, $itemsOnPage");
+            $ordersStmt = $db->query("SELECT id, status, created_at, updated_at FROM `Order` WHERE user_id = $user ORDER BY updated_at DESC LIMIT $start, $itemsOnPage");
             $orders = $ordersStmt->fetchAll();
             $ordersStmt->closeCursor();
             return $orders;            
