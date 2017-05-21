@@ -1,0 +1,10 @@
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\bin\Debug\ManagerApp_GUI.exe.config
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\bin\Debug\ManagerApp_GUI.exe
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\bin\Debug\ManagerApp_GUI.pdb
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.csprojResolveAssemblyReference.cache
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.Properties.Resources.resources
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.csproj.GenerateResource.Cache
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.exe
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.pdb
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.MainForm.resources
+C:\core\projects\WebTrainingYard\client\ManagerApp\ManagerApp_GUI\obj\Debug\ManagerApp_GUI.CategoryManagerForm.resources
